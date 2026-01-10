@@ -36,7 +36,7 @@ test("Пользователь может зарегистрироваться �
   await expect(page.getByRole("navigation")).toContainText(user.name);
 });
 
-test("Пользователь может изменить свое имя в профиле", async ({ page }) => {
+test ("Пользователь может изменить свое имя в профиле", async ({ page }) => {
   getRegistration(page, user.email, user.name, user.password, url);
   await expect(page.getByRole("navigation")).toContainText(user.name);
   // изменение имени
