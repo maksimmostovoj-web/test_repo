@@ -28,14 +28,14 @@ const getRegistration = async (page, email, name, password, url) => {
   await page.getByRole("button", { name: "Sign up" }).click();
 };
 
-test.only("Пользователь может зарегистрироваться используя email и пароль", async ({
+test("Пользователь может зарегистрироваться используя email и пароль", async ({
   page,
 }) => {
   getRegistration(page, user.email, user.name, user.password, url);
   await expect(page.getByRole("navigation")).toContainText(user.name);
 });
 
-test("Пользователь может изменить свое имя в профиле", async ({ page }) => {
+test ("Пользователь может изменить свое имя в профиле", async ({ page }) => {
   getRegistration(page, user.email, user.name, user.password, url);
   await expect(page.getByRole("navigation")).toContainText(user.name);
   // изменение имени
