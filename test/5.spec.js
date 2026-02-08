@@ -164,4 +164,5 @@ test("Пользователь удаляет статью", async ({ page }) =>
 
   // Проверяем, что кнопки редактирования нет (статья не существует)
   await expect(articleEditPage.editButton).not.toBeVisible();
+  
 });

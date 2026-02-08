@@ -23,6 +23,7 @@ export class HomePage {
     await this.profileName.click();
     await this.profileLink.click();
   }
+  
 
   async logout() {
     await this.profileName.click();

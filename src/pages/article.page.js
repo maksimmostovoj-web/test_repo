@@ -16,6 +16,7 @@ export class ArticlePage {
     this.publishButton = page.getByRole("button", { name: "Publish Article" });
     this.articleHeading = (title) => page.getByRole("heading", { name: title });
   }
+  
 
   async createArticle(title, about, content, tags) {
     await this.newArticleLink.click();

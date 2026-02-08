@@ -6,6 +6,7 @@ export class RegisterPage {
     this.nameInput = page.getByRole("textbox", { name: "Your Name" });
     this.passwordInput = page.getByRole("textbox", { name: "Password" });
   }
+  
   async register(name, email, password) {
     await this.nameInput.click();
     await this.nameInput.fill(name);
