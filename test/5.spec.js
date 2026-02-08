@@ -5,6 +5,7 @@ import { MainPage } from "../src/pages/main.page";
 import { RegisterPage } from "../src/pages/register.page";
 import { SettingsPage } from "../src/pages/settings.page";
 import { ArticlePage } from "../src/pages/article.page";
+import { ArticleEditPage } from "../src/pages/article_edit.page";
 
 const createArticle = () => ({
   title: faker.lorem.words(3),
@@ -77,7 +78,7 @@ test("Пользователь создает новую статью", async ({
   const email = faker.internet.email({ provider: "qa.guru" });
   const name = faker.person.fullName();
   const password = faker.internet.password({ length: 10 });
-  const article = createArticle(); // вызов функции
+  const article = createArticle();
   const { title, about, content, tags } = article;
 
   const homePage = new HomePage(page);
@@ -116,6 +117,7 @@ test("Пользователь оставляет комментарий к ст
   const mainPage = new MainPage(page);
   const registerPage = new RegisterPage(page);
   const articlePage = new ArticlePage(page);
+  const articleEditPage = new ArticleEditPage(page);
 
   // Регистрация
   await mainPage.open(url);
@@ -132,7 +134,7 @@ test("Пользователь оставляет комментарий к ст
   await page.waitForLoadState("networkidle");
 
   // 1. Добавляем комментарий
-  await articlePage.addComment(commentText);
+  await articleEditPage.addComment(commentText);
 
   // 2. Проверка добавления комментария
   await expect(page.getByText(commentText)).toBeVisible();
@@ -149,6 +151,7 @@ test("Пользователь редактирует статью", async ({ pa
   const mainPage = new MainPage(page);
   const registerPage = new RegisterPage(page);
   const articlePage = new ArticlePage(page);
+  const articleEditPage = new ArticleEditPage(page);
 
   // Регистрация
   await mainPage.open(url);
@@ -169,7 +172,7 @@ test("Пользователь редактирует статью", async ({ pa
     .first()
     .click();
   // Редактирование статьи (первой в списке)
-  await articlePage.editArticle(updatedTitle, updatedAbout, 0);
+  await articleEditPage.editArticle(updatedTitle, updatedAbout, 0);
 
   // Проверка обновления статьи
   await expect(page.getByRole("heading", { name: updatedTitle })).toBeVisible();
@@ -195,6 +198,7 @@ test("Пользователь удаляет статью", async ({ page }) =>
   const mainPage = new MainPage(page);
   const registerPage = new RegisterPage(page);
   const articlePage = new ArticlePage(page);
+  const articleEditPage = new ArticleEditPage(page);
 
   // Регистрация
   await mainPage.open(url);
@@ -210,8 +214,8 @@ test("Пользователь удаляет статью", async ({ page }) =>
   // Сохранение URL статьи для проверки
   const postUrl = page.url();
 
-  // Д
-  await articlePage.deleteArticle(0);
+  // удаление статьи
+  await articleEditPage.deleteArticle(0);
 
   await page.waitForTimeout(2000); // Ожидание
 
