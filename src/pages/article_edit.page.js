@@ -24,6 +24,10 @@ export class ArticleEditPage {
       name: "Write your article (in",
     });
     this.updateButton = page.getByRole("button", { name: "Update Article" });
+
+    // Локаторы для проверок
+    this.editButton = page.locator("a").filter({ hasText: "Edit Article" });
+    this.commentText = (text) => page.getByText(text);
   }
 
   async editArticle(title, about, articleIndex = 0) {

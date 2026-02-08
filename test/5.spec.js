@@ -18,16 +18,15 @@ const createArticle = () => ({
 
 const url = "https://realworld.qa.guru/";
 
-test("Пользователь может зарегистрироваться используя email и пароль Page Object", async ({
-  page,
-}) => {
+test.beforeEach(async ({ page }) => {
+  // Регистрация нового пользователя перед каждым тестом
   const email = faker.internet.email({ provider: "qa.guru" });
   const name = faker.person.fullName();
   const password = faker.internet.password({ length: 10 });
 
-  const homePage = new HomePage(page);
   const mainPage = new MainPage(page);
   const registerPage = new RegisterPage(page);
+  const homePage = new HomePage(page);
 
   // Регистрация
   await mainPage.open(url);
@@ -36,25 +35,20 @@ test("Пользователь может зарегистрироваться �
   await expect(homePage.profileName).toContainText(name);
 });
 
+test("Пользователь может зарегистрироваться используя email и пароль Page Object", async ({
+  page,
+}) => {
+  // Регистрация уже выполнена в beforeEach
+  const homePage = new HomePage(page);
+  await expect(homePage.profileName).toBeVisible();
+});
+
 test("Пользователь может изменить свое имя в профиле", async ({ page }) => {
-  const email = faker.internet.email({ provider: "qa.guru" });
-  const name = faker.person.fullName();
-  const password = faker.internet.password({ length: 10 });
   const NewVersionName = faker.person.fullName();
 
-  const mainPage = new MainPage(page);
   const homePage = new HomePage(page);
-
-  const registerPage = new RegisterPage(page);
   const settingsPage = new SettingsPage(page);
 
-  // Регистрация
-  await mainPage.open(url);
-  await mainPage.gotoRegister();
-  await registerPage.register(name, email, password);
-
-  // Проверка регистрации
-  await expect(homePage.profileName).toContainText(name);
   // Переход в настройки и изменение имени
   await homePage.goToSettings();
   await settingsPage.updateName(NewVersionName);
@@ -69,66 +63,40 @@ test("Пользователь может изменить свое имя в п
   await homePage.goToProfile();
 
   // Проверка изменения имени на странице профиля
-  await expect(
-    page.getByRole("heading", { name: NewVersionName }),
-  ).toBeVisible();
+  await expect(homePage.profileHeading(NewVersionName)).toBeVisible();
 });
 
 test("Пользователь создает новую статью", async ({ page }) => {
-  const email = faker.internet.email({ provider: "qa.guru" });
-  const name = faker.person.fullName();
-  const password = faker.internet.password({ length: 10 });
   const article = createArticle();
   const { title, about, content, tags } = article;
 
   const homePage = new HomePage(page);
-  const mainPage = new MainPage(page);
-  const registerPage = new RegisterPage(page);
   const articlePage = new ArticlePage(page);
 
-  // Регистрация
-  await mainPage.open(url);
-  await mainPage.gotoRegister();
-  await registerPage.register(name, email, password);
   // Заполнение полей формы, для создания статьи:
   await articlePage.createArticle(title, about, content, tags);
 
   // Проверка создания статьи
-  await expect(page.getByRole("heading", { name: title })).toBeVisible();
+  await expect(articlePage.articleHeading(title)).toBeVisible();
   // Проверка статьи в профиле
   await homePage.goToProfile();
 
-  await expect(
-    page.getByRole("link", {
-      name: new RegExp(`${title}.*${about}.*Read more`, "i"),
-    }),
-  ).toBeVisible();
+  await expect(homePage.articleLink(title, about)).toBeVisible();
 });
 
 test("Пользователь оставляет комментарий к статье", async ({ page }) => {
-  const email = faker.internet.email({ provider: "qa.guru" });
-  const name = faker.person.fullName();
-  const password = faker.internet.password({ length: 10 });
-  const article = createArticle(); // вызов функции
+  const article = createArticle();
   const { title, about, content, tags } = article;
   const commentText = faker.lorem.sentence();
 
-  const homePage = new HomePage(page);
-  const mainPage = new MainPage(page);
-  const registerPage = new RegisterPage(page);
   const articlePage = new ArticlePage(page);
   const articleEditPage = new ArticleEditPage(page);
-
-  // Регистрация
-  await mainPage.open(url);
-  await mainPage.gotoRegister();
-  await registerPage.register(name, email, password);
 
   // Создание статьи
   await articlePage.createArticle(title, about, content, tags);
 
   // Проверка создания статьи
-  await expect(page.getByRole("heading", { name: title })).toBeVisible();
+  await expect(articlePage.articleHeading(title)).toBeVisible();
 
   // Ожидание загрузки страницы
   await page.waitForLoadState("networkidle");
@@ -137,79 +105,51 @@ test("Пользователь оставляет комментарий к ст
   await articleEditPage.addComment(commentText);
 
   // 2. Проверка добавления комментария
-  await expect(page.getByText(commentText)).toBeVisible();
+  await expect(articleEditPage.commentText(commentText)).toBeVisible();
 });
 
 test("Пользователь редактирует статью", async ({ page }) => {
-  const email = faker.internet.email({ provider: "qa.guru" });
-  const name = faker.person.fullName();
-  const password = faker.internet.password({ length: 10 });
-  const article = createArticle(); // вызов функции
+  const article = createArticle();
   const { title, about, content, tags, updatedTitle, updatedAbout } = article;
 
   const homePage = new HomePage(page);
-  const mainPage = new MainPage(page);
-  const registerPage = new RegisterPage(page);
   const articlePage = new ArticlePage(page);
   const articleEditPage = new ArticleEditPage(page);
 
-  // Регистрация
-  await mainPage.open(url);
-  await mainPage.gotoRegister();
-  await registerPage.register(name, email, password);
-  //Создание статьи
+  // Создание статьи
   await articlePage.createArticle(title, about, content, tags);
 
   // Проверка создания
-  await expect(page.getByRole("heading", { name: title })).toBeVisible();
+  await expect(articlePage.articleHeading(title)).toBeVisible();
 
   // Переход на страницу статьи через профиль
   await homePage.goToProfile();
-  await page
-    .getByRole("link", {
-      name: new RegExp(`${title}.*${about}.*Read more`, "i"),
-    })
-    .first()
-    .click();
+  await homePage.articleLink(title, about).first().click();
   // Редактирование статьи (первой в списке)
   await articleEditPage.editArticle(updatedTitle, updatedAbout, 0);
 
   // Проверка обновления статьи
-  await expect(page.getByRole("heading", { name: updatedTitle })).toBeVisible();
+  await expect(articlePage.articleHeading(updatedTitle)).toBeVisible();
 
   // Проверка в профиле
   await homePage.goToProfile();
 
-  await expect(
-    page.getByRole("link", {
-      name: new RegExp(`${updatedTitle}.*${updatedAbout}.*Read more`, "i"),
-    }),
-  ).toBeVisible();
+  await expect(homePage.articleLink(updatedTitle, updatedAbout)).toBeVisible();
 });
 
 test("Пользователь удаляет статью", async ({ page }) => {
-  const email = faker.internet.email({ provider: "qa.guru" });
-  const name = faker.person.fullName();
-  const password = faker.internet.password({ length: 10 });
-  const article = createArticle(); // вызов функции
-  const { title, about, content, tags, updatedTitle, updatedAbout } = article;
+  const article = createArticle();
+  const { title, about, content, tags } = article;
 
   const homePage = new HomePage(page);
-  const mainPage = new MainPage(page);
-  const registerPage = new RegisterPage(page);
   const articlePage = new ArticlePage(page);
   const articleEditPage = new ArticleEditPage(page);
 
-  // Регистрация
-  await mainPage.open(url);
-  await mainPage.gotoRegister();
-  await registerPage.register(name, email, password);
-
-  //Создание статьи
+  // Создание статьи
   await articlePage.createArticle(title, about, content, tags);
 
   // Проверка создания
-  await expect(page.getByRole("heading", { name: title })).toBeVisible();
+  await expect(articlePage.articleHeading(title)).toBeVisible();
 
   // Сохранение URL статьи для проверки
   const postUrl = page.url();
@@ -223,6 +163,5 @@ test("Пользователь удаляет статью", async ({ page }) =>
   await page.goto(postUrl);
 
   // Проверяем, что кнопки редактирования нет (статья не существует)
-  const editButton = page.locator("a").filter({ hasText: "Edit Article" });
-  await expect(editButton).not.toBeVisible();
+  await expect(articleEditPage.editButton).not.toBeVisible();
 });

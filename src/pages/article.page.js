@@ -14,6 +14,7 @@ export class ArticlePage {
     });
     this.tagsInput = page.getByRole("textbox", { name: "Enter tags" });
     this.publishButton = page.getByRole("button", { name: "Publish Article" });
+    this.articleHeading = (title) => page.getByRole("heading", { name: title });
   }
 
   async createArticle(title, about, content, tags) {

@@ -7,6 +7,11 @@ export class HomePage {
     this.logoutButton = page.getByRole("button", {
       name: "Or click here to logout.",
     });
+    this.articleLink = (title, about) =>
+      page.getByRole("link", {
+        name: new RegExp(`${title}.*${about}.*Read more`, "i"),
+      });
+    this.profileHeading = (name) => page.getByRole("heading", { name: name });
   }
 
   async goToSettings() {
