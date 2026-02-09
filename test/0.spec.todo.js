@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 test("Добавление новой задачи", async ({ page }) => {
   // Пердусловия
   await expect(
-    page.getByRole("textbox", { name: "What needs to be done?" })
+    page.getByRole("textbox", { name: "What needs to be done?" }),
   ).toBeVisible();
   // Шаги
   await page.getByRole("textbox", { name: "What needs to be done?" }).click();
@@ -42,7 +42,7 @@ test("Добавление новой задачи и перевод ее в с�
     page
       .getByRole("listitem")
       .filter({ hasText: "Новая задачаEdit Todo Input" })
-      .getByRole("checkbox")
+      .getByRole("checkbox"),
   ).toBeVisible();
 });
 
@@ -69,7 +69,7 @@ test("Удаление выполненной задачи", async ({ page }) =>
     page
       .getByRole("listitem")
       .filter({ hasText: "задача 2Edit Todo Input" })
-      .getByRole("checkbox")
+      .getByRole("checkbox"),
   ).toBeVisible();
   await page.getByRole("button", { name: "Clear Completed" }).click();
   await expect(page.getByText("задача 2")).not.toBeVisible();

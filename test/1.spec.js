@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 //todo Нейминг теста
-test ("Пользователь может зарегистрироваться используя email и пароль", async ({
+test("Пользователь может зарегистрироваться используя email и пароль", async ({
   page,
 }) => {
   await page.goto("https://realworld.qa.guru/");

@@ -16,7 +16,6 @@ export class MainPage {
   async gotoLogin() {
     await this.loginLink.click();
   }
-  
 
   async open(url) {
     await this.page.goto(url);

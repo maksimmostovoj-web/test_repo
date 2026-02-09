@@ -6,7 +6,6 @@ export class SettingsPage {
       name: "Update Settings",
     });
   }
-  
 
   async updateName(newName) {
     await this.nameField.click();

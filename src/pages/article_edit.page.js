@@ -52,11 +52,9 @@ export class ArticleEditPage {
       this.deleteArticleButtons.nth(articleIndex).click();
     });
   }
-  
 
   async addComment(commentText) {
     await this.commentInput.fill(commentText);
     await this.postCommentButton.click();
   }
-
 }

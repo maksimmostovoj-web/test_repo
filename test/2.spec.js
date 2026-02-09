@@ -31,6 +31,6 @@ test("Пользователь может заказать бургер", async 
   //await expect(page.getByText("✅ Заказ принят!")).toBeVisible();
   // проверка через id
   await expect(page.locator("#popupMessage")).toContainText(
-    `Спасибо за заказ, ${name}!`
+    `Спасибо за заказ, ${name}!`,
   );
 });
