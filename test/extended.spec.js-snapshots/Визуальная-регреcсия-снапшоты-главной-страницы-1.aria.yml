@@ -1,0 +1,148 @@
+- banner:
+  - navigation:
+    - link "conduit":
+      - /url: "#/"
+    - list:
+      - listitem:
+        - link " Source code":
+          - /url: https://github.com/TonyMckes/conduit-realworld-example-app
+    - list:
+      - listitem:
+        - link " Home":
+          - /url: "#/"
+      - listitem:
+        - link " Login":
+          - /url: "#/login"
+      - listitem:
+        - link "Sign up":
+          - /url: "#/register"
+- main:
+  - heading "conduit" [level=1]
+  - paragraph: A place to share your knowledge.
+  - list:
+    - listitem:
+      - button "Global Feed"
+  - link "Derek Franecki IV":
+    - /url: "#/profile/Derek Franecki IV"
+    - img "Derek Franecki IV"
+  - link "Derek Franecki IV":
+    - /url: "#/profile/Derek Franecki IV"
+  - text: /February \d+, \d+/
+  - button " ( 0 )"
+  - link "commodi copiose victus defetiscor Cui vulariter minima stips textus vigor aduro. Read more... tum":
+    - /url: "#/article/commodi-copiose-victus-defetiscor"
+    - heading "commodi copiose victus defetiscor" [level=1]
+    - paragraph: Cui vulariter minima stips textus vigor aduro.
+    - text: ""
+    - list:
+      - listitem: tum
+  - link "Jo Hoppe":
+    - /url: "#/profile/Jo Hoppe"
+    - img "Jo Hoppe"
+  - link "Jo Hoppe":
+    - /url: "#/profile/Jo Hoppe"
+  - text: /February \d+, \d+/
+  - button " ( 0 )"
+  - link "ea vulticulus sui Fuga debitis cogito temperantia vallum volaticus tribuo. Read more... uxor":
+    - /url: "#/article/ea-vulticulus-sui"
+    - heading "ea vulticulus sui" [level=1]
+    - paragraph: Fuga debitis cogito temperantia vallum volaticus tribuo.
+    - text: ""
+    - list:
+      - listitem: uxor
+  - link "Max Weimann":
+    - /url: "#/profile/Max Weimann"
+    - img "Max Weimann"
+  - link "Max Weimann":
+    - /url: "#/profile/Max Weimann"
+  - text: /February \d+, \d+/
+  - button " ( 0 )"
+  - link "solus comes centum Aureus impedit timidus ceno creptio aperte ex impedit. Read more... cura":
+    - /url: "#/article/solus-comes-centum"
+    - heading "solus comes centum" [level=1]
+    - paragraph: Aureus impedit timidus ceno creptio aperte ex impedit.
+    - text: ""
+    - list:
+      - listitem: cura
+  - navigation "Pagination":
+    - listitem:
+      - button "Previous page" [disabled]
+    - listitem:
+      - button "Page 1 is your current page"
+    - listitem:
+      - button "Page 2"
+    - listitem:
+      - button "Page 3"
+    - listitem:
+      - button "..."
+    - listitem:
+      - button /Page \d+/
+    - listitem:
+      - button /Page \d+/
+    - listitem:
+      - button /Page \d+/
+    - listitem:
+      - button "Next page"
+  - complementary:
+    - heading "Popular Tags" [level=6]
+    - button "реклама"
+    - button "autus"
+    - button "iste"
+    - button "tripudio"
+    - button "amplus"
+    - button "inflammatio"
+    - button "ver"
+    - button "umbra"
+    - button "apto"
+    - button "bestia"
+    - button "placeat"
+    - button "vinitor"
+    - button "asporto"
+    - button "aestivus"
+    - button "armarium"
+    - button "adfectus"
+    - button "conduco"
+    - button "acsi"
+    - button "timor"
+    - button "bene"
+    - button "sortitus"
+    - button "sumo"
+    - button "ustilo"
+    - button "sperno"
+    - button "trepide"
+    - button "perferendis"
+    - button "clamo"
+    - button "videlicet"
+    - button "cognatus"
+    - button "vulgus"
+    - button "voluptate"
+    - button "consuasor"
+    - button "denego"
+    - button "conscendo"
+    - button "tergum"
+    - button "volutabrum"
+    - button "verto"
+    - button "cras"
+    - button "capto"
+    - button "peccatus"
+    - button "subito"
+    - button "confido"
+    - button "subnecto"
+    - button "creber"
+    - button "abduco"
+    - button "suggero"
+    - button "vallum"
+    - button "terra"
+    - button "alienus"
+    - button "vetus"
+- contentinfo:
+  - link "conduit":
+    - /url: "#/"
+  - text: An interactive learning project from
+  - link "Thinkster":
+    - /url: https://thinkster.io
+  - text: . Code & design licensed under MIT.
+  - list:
+    - listitem:
+      - link " Source code":
+        - /url: https://github.com/TonyMckes/conduit-realworld-example-app

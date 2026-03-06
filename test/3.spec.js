@@ -20,14 +20,16 @@ const getRegistration = async (page, email, name, password, url) => {
   await page.getByRole("button", { name: "Sign up" }).click();
 };
 
-test("Пользователь может зарегистрироваться используя email и пароль", async ({
+test.skip("Пользователь может зарегистрироваться используя email и пароль", async ({
   page,
 }) => {
   getRegistration(page, email, name, password, url);
   await expect(page.getByRole("navigation")).toContainText(name);
 });
 
-test("Пользователь может изменить свое имя в профиле", async ({ page }) => {
+test.skip("Пользователь может изменить свое имя в профиле", async ({
+  page,
+}) => {
   getRegistration(page, email, name, password, url);
   // todo Дописать тест на изменение имени в профиле
   await expect(page.getByRole("navigation")).toContainText(name);

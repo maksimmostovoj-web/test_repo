@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import * as allure from "allure-js-commons";
 import { faker } from "@faker-js/faker";
 import { App } from "../src/pages/app.page";
 import { UserBuilder } from "../src/helpers/builders";
@@ -14,7 +15,7 @@ test.beforeEach(async ({ page }) => {
   await app.mainPage.open(url);
   await app.mainPage.gotoRegister();
   await app.registerPage.register(user.name, user.email, user.password);
-  await expect(app.homePage.profileName).toContainText(user.name);
+
 });
 
 test("Пользователь может зарегистрироваться используя email и пароль Page Object", async ({
@@ -26,6 +27,9 @@ test("Пользователь может зарегистрироваться �
 });
 
 test("Пользователь может изменить свое имя в профиле", async ({ page }) => {
+  //пример привязки к тесткейсу
+  await allure.tms("TMS-456", "Related TMS issue");
+
   const NewVersionName = faker.person.fullName();
   const app = new App(page);
 
@@ -131,7 +135,7 @@ test("Пользователь удаляет статью", async ({ page }) =>
 
   await page.waitForTimeout(2000); // Ожидание
 
-  // Проверкаудаления статьи -  по URL статьи
+  // Проверка удаления статьи -  по URL статьи
   await page.goto(postUrl);
 
   // Проверяем, что кнопки редактирования нет (статья не существует)

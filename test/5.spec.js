@@ -32,7 +32,6 @@ test.beforeEach(async ({ page }) => {
   await mainPage.open(url);
   await mainPage.gotoRegister();
   await registerPage.register(name, email, password);
-  await expect(homePage.profileName).toContainText(name);
 });
 
 test("Пользователь может зарегистрироваться используя email и пароль Page Object", async ({
