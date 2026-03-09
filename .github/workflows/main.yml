@@ -21,3 +21,14 @@ jobs:
         run: npx playwright install --with-deps
       - name: Запускаем тысты
         run: npm t
+        #todo унести в package.json
+      - name: Сгенерировать allure 3 отчет в один файл 
+        run: npx allure awesome .allure-results --single-file 
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          name: allure single file
+          path: 
+              allure-report/index.html
+              allure-results
+              playwright-report
