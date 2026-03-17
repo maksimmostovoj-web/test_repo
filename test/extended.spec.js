@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 const url = "https://realworld.qa.guru/";
 
-test("Визуальная регреcсия главной страницы", async ({ page }) => {
+test.only("Визуальная регреcсия главной страницы", async ({ page }) => {
   await page.goto(url);
 
   await expect(page).toHaveScreenshot("homePage.png", {
@@ -14,13 +14,13 @@ test("Визуальная регреcсия главной страницы", a
   });
 });
 
-test("Визуальная регреcсия снапшоты главной страницы", async ({ page }) => {
+test.only("Визуальная регреcсия снапшоты главной страницы", async ({ page }) => {
   await page.goto(url);
   const $body = page.locator("#root");
   await expect($body).toMatchAriaSnapshot();
 });
 
-test("Визуальная регреcсия главной страницы с моком данных", async ({ page }) => {
+test.only("Визуальная регреcсия главной страницы с моком данных", async ({ page }) => {
   await page.route("**/tags", async (route) => {
     // todo переделать в json
     const json = { tags: ["Понедельник", "Monday"] };
@@ -39,7 +39,7 @@ test("Визуальная регреcсия главной страницы с 
   });
 });
 
-test("Визуальная регреcсия главной страницы с добавлением данных", async ({ page }) => {
+test.only("Визуальная регреcсия главной страницы с добавлением данных", async ({ page }) => {
   const mockName = "Константинопольский Константин Константинович";
   await page.route("**/tags", async (route) => {
     const response = await route.fetch();
@@ -60,7 +60,7 @@ test("Визуальная регреcсия главной страницы с 
   });
 });
 
-test("Визуальная регреcсия авторизация", async ({ page }) => {
+test.only("Визуальная регреcсия авторизация", async ({ page }) => {
   const json = {
     user: {
       email: "!sni221225@ya.ru",

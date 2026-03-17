@@ -8,7 +8,8 @@
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui",
-    "report": "npx playwright show-report"
+    "report": "npx playwright show-report",
+    "allure:generate": "allure generate allure-results -o allure-report --clean"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,12 @@
   },
   "homepage": "https://github.com/maksimmostovoj-web/-#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@faker-js/faker": "^10.2.0",
     "@playwright/test": "^1.58.2",
     "@types/node": "^24.10.1",
-    "allure-playwright": "^3.4.5"
+    "allure-playwright": "^3.4.5",
+    "eslint": "^10.0.3",
+    "globals": "^17.4.0"
   }
 }
