@@ -1,0 +1,38 @@
+name: playwright api ans ui test
+# Когда запускаем
+on:
+  push:
+    branches:
+      - main
+# Ручной запуск
+  workflow_dispatch: 
+
+jobs:
+  pw5Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6.3.0
+      - name: Установка npm пакеты из package.json
+        run: npm ci
+      - name: Установка браузеров
+        run: npx playwright install --with-deps
+      - name: Запускаем тысты
+        run: npm t
+        #todo унести в package.json
+      - name: Сгенерировать allure 3 отчет в один файл
+        run: npx allure awesome ./allure-results --single-file
+        continue-on-error: true
+        if: always()
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v6.0.0
+        continue-on-error: true
+        if: always()
+        with:
+          name: allure single file
+          path: |
+              allure-report/index.html
+              allure-results
+              playwright-report
