@@ -15,7 +15,7 @@ test.describe("Challenge with service", () => {
     console.log(`${url}gui/challenges/${token}`);
   });
 
-  test("Получить список челленджей", async ({ request }, testinfo) => {
+  test.only("Получить список челленджей", async ({ request }, testinfo) => {
     let api = new Api(request);
     let response = await api.challenges.get(testinfo, token);
     expect(response.body.challenges.length).toBe(59);
