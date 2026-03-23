@@ -10,22 +10,18 @@ pipeline {
         }
       }      
     }
-    stage('Allure') {
-      steps {
-        allure(
-          [
-            includeProperties: false,
-            jdk: '',
-            properties: [],
-            reportBuildPolicy: 'ALWAYS',
-            results: [[path: 'allure-results']]
-          ]
-        )
-      }
-    }
   }
   post {
     always {
+      allure(
+        [
+          includeProperties: false,
+          jdk: '',
+          properties: [],
+          reportBuildPolicy: 'ALWAYS',
+          results: [[path: 'allure-results']]
+        ]
+      )
       echo 'This will always run regardless of test results'
     }
     success {
