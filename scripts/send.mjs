@@ -53,25 +53,40 @@ function buildMessage(report, stats) {
   const { name, reportName } = report
   const { total, passed, failed, broken, skipped, unknown } = stats
   const duration = report.time?.duration || report.duration || 0
+
   const project =
     process.env.PROJECT_NAME ?? name ?? reportName ?? 'Test Report'
   const environment = process.env.TEST_ENV ?? 'staging'
   const comment = process.env.TEST_COMMENT ?? ''
   const reportLink = process.env.REPORT_LINK ?? ''
+
   const pct = (n) => (total > 0 ? ((n / total) * 100).toFixed(1) : '0')
 
-  const lines = [`*${project}*`, '', 'Results:', `Environment: ${environment}`]
-  if (comment) lines.push(`Comment: ${comment}`)
-  lines.push(
-    `Duration: ${formatDuration(duration)}`,
-    `Total: ${total}`,
-    `Passed: ${passed} (${pct(passed)} %)`,
-    `Failed: ${failed} (${pct(failed)} %)`,
-    `Skipped: ${skipped}`
-  )
-  if (broken > 0) lines.push(`Broken: ${broken}`)
-  if (unknown > 0) lines.push(`Unknown: ${unknown}`)
-  if (reportLink) lines.push(`[Report](${reportLink})`)
+  // Красивое форматирование
+  const lines = [
+    `📊 *${project}*`,
+    '',
+    `🖥️ *Окружение:* ${environment}`,
+    comment ? `💬 *Комментарий:* ${comment}` : '',
+    `⏱️ *Длительность:* ${formatDuration(duration)}`,
+    '',
+    `📈 *Статистика:*`,
+    `   ✅ *Успешно:* ${passed} (${pct(passed)} %)`,
+    `   ❌ *Провалено:* ${failed} (${pct(failed)} %)`,
+    `   ⏭️ *Пропущено:* ${skipped}`
+  ].filter(Boolean)
+
+  if (broken > 0) lines.push(`   💔 *Сломано:* ${broken}`)
+  if (unknown > 0) lines.push(`   ❓ *Неизвестно:* ${unknown}`)
+
+  lines.push('')
+  lines.push(`📊 *Всего тестов:* ${total}`)
+
+  if (reportLink) {
+    lines.push('')
+    lines.push(`🔗 [📄 Открыть отчет](${reportLink})`)
+  }
+
   return lines.join('\n')
 }
 
@@ -100,7 +115,6 @@ async function main() {
   const stats = getStats(report)
   const chartUrl = buildChartUrl(stats)
   const message = buildMessage(report, stats)
-  console.log("MESSAGE:", message);
   console.log('Sending notification to Telegram...')
   await sendToTelegram(token, chat, chartUrl, message)
   console.log('Notification sent successfully!')
