@@ -37,8 +37,8 @@ jobs:
       # 5. Запускаем тесты
       - name: Запускаем тесты
         run: npm t
-        continue-on-error: true # Продолжаем даже если тесты упали
-        if: always() # Выполняем всегда
+        continue-on-error: true
+        if: always()
 
       # 6. Генерируем Allure отчет
       - name: Сгенерировать allure отчет
@@ -46,7 +46,19 @@ jobs:
         continue-on-error: true
         if: always()
 
-      # ========== НОВЫЕ ШАГИ ДЛЯ ПУБЛИКАЦИИ ОТЧЕТА ==========
+      # 6.1. Исправляем структуру отчета (переносим summary.json в widgets)
+      - name: Fix allure report structure
+        run: |
+          mkdir -p allure-report/widgets
+          if [ -f allure-report/summary.json ]; then
+            mv allure-report/summary.json allure-report/widgets/
+            echo "✅ summary.json moved to widgets/"
+          else
+            echo "✅ summary.json already in widgets or not found"
+          fi
+        if: always()
+
+      # ========== ШАГИ ДЛЯ ПУБЛИКАЦИИ ОТЧЕТА ==========
 
       # 7. Настраиваем GitHub Pages
       - name: Setup Pages
@@ -58,11 +70,11 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         if: always()
         with:
-          path: 'allure-report' # Папка с отчетом
+          path: 'allure-report'
 
       # 9. Публикуем отчет на GitHub Pages
       - name: Deploy to GitHub Pages
-        id: deployment # Сохраняем результат, чтобы получить URL
+        id: deployment
         uses: actions/deploy-pages@v4
         if: always()
 
@@ -70,11 +82,11 @@ jobs:
       - name: Send Telegram notification
         if: always()
         env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }} # Токен бота (секрет)
-          TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }} # ID чата (секрет)
-          PROJECT_NAME: 'JS QA' # Название проекта
-          TEST_ENV: 'GitHub Actions' # Окружение
-          REPORT_LINK: '${{ steps.deployment.outputs.page_url }}' # Ссылка на отчет
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }}
+          PROJECT_NAME: 'JS QA'
+          TEST_ENV: 'GitHub Actions'
+          REPORT_LINK: '${{ steps.deployment.outputs.page_url }}'
         run: |
           node scripts/send.mjs allure-report/widgets/summary.json
 
