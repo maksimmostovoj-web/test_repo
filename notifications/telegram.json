@@ -1,20 +1,21 @@
 {
   "base": {
     "logo": "",
-    "project": "JS",
+    "project": "JS QA",
     "environment": "some env",
     "comment": "some comment",
     "reportLink": "",
     "language": "ru",
     "allureFolder": "allure-report",
-    "enableChart": false,
+    "enableChart": true,
     "enableSuitesPublishing": false,
     "customData": {}
   },
   "telegram": {
-    "token": "киукеуиекпиуе",
-    "chat": "-кпиукеиук",
+    "token": "8774837354:AAEyYJIotc5Ix8V53OX63WIWK22fh_qrrgk",
+    "chat": "-5202391707",
     "topic": "",
-    "replyTo": ""
+    "replyTo": "",
+    "templatePath": "/templates/telegram.ftl"
   }
-}   
+}

@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui",
@@ -31,5 +35,8 @@
     "allure-playwright": "^3.4.5",
     "eslint": "^10.0.3",
     "globals": "^17.4.0"
+  },
+  "dependencies": {
+    "eslint-config-prettier": "^10.1.8"
   }
 }
