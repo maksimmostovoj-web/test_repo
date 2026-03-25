@@ -42,9 +42,15 @@ jobs:
           sudo mv allurectl /usr/local/bin/
         if: always()
 
-      # Запускаем тесты
-      - name: Запускаем тесты
-        run: npm t
+      # Запускаем тесты и загружаем результаты в Allure TestOps
+      - name: Run tests and upload to Allure TestOps
+        env:
+          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
+          ALLURE_RESULTS: allure-results
+        run: |
+          allurectl watch -- npm t
         continue-on-error: true
         if: always()
 
@@ -54,22 +60,6 @@ jobs:
           echo "=== Количество файлов в allure-results ==="
           echo "JSON: $(find allure-results -name "*.json" 2>/dev/null | wc -l)"
           echo "PNG: $(find allure-results -name "*.png" 2>/dev/null | wc -l)"
-        if: always()
-
-      # Загружаем результаты тестов в Allure TestOps
-      - name: Upload results to Allure TestOps
-        env:
-          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
-          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
-          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
-          ALLURE_RESULTS: allure-results
-        run: |
-          echo "=== Содержимое allure-results (первые 10 файлов) ==="
-          ls -la allure-results/ | head -10
-          echo ""
-          echo "=== Загружаем с флагом force ==="
-          allurectl upload --force
-        continue-on-error: true
         if: always()
 
       # Генерируем Allure отчет
