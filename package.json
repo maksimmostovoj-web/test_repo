@@ -32,7 +32,7 @@
     "@faker-js/faker": "^10.2.0",
     "@playwright/test": "^1.58.2",
     "@types/node": "^24.10.1",
-    "allure-playwright": "^3.4.5",
+    "allure-playwright": "^3.6.0",
     "eslint": "^10.0.3",
     "globals": "^17.4.0"
   },
