@@ -34,19 +34,51 @@ jobs:
       - name: Установка браузеров
         run: npx playwright install --with-deps
 
-      # 5. Запускаем тесты
+      # Устанавливаем утилиту allurectl для работы с Allure TestOps
+      - name: Install Allure TestOps CLI
+        run: |
+          curl -L https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -o allurectl
+          chmod +x allurectl
+          sudo mv allurectl /usr/local/bin/
+        if: always()
+
+      # Загружаем существующие результаты тестов в Allure TestOps
+      - name: Upload results to Allure TestOps
+        env:
+          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
+          ALLURE_RESULTS: allure-results
+        run: |
+          allurectl upload
+        continue-on-error: true
+        if: always()
+
+      # Запускаем тесты
       - name: Запускаем тесты
         run: npm t
-        continue-on-error: true # Продолжаем даже если тесты упали
-        if: always() # Выполняем всегда
+        continue-on-error: true
+        if: always()
 
-      # 6. Генерируем Allure отчет
+      # Загружаем свежие результаты тестов в Allure TestOps
+      - name: Upload fresh results to Allure TestOps
+        env:
+          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
+          ALLURE_RESULTS: allure-results
+        run: |
+          allurectl upload
+        continue-on-error: true
+        if: always()
+
+      # Генерируем Allure отчет
       - name: Сгенерировать allure отчет
         run: npx allure awesome ./allure-results --single-file
         continue-on-error: true
         if: always()
 
-      # 6.1. Исправляем структуру отчета (переносим summary.json в widgets)
+      # Исправляем структуру отчета (переносим summary.json в widgets)
       - name: Fix allure report structure
         run: |
           mkdir -p allure-report/widgets
@@ -60,42 +92,42 @@ jobs:
 
       # ========== ШАГИ ДЛЯ ПУБЛИКАЦИИ ОТЧЕТА ==========
 
-      # 7. Настраиваем GitHub Pages
+      # Настраиваем GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
         if: always()
 
-      # 8. Загружаем отчет как артефакт для деплоя
+      # Загружаем отчет как артефакт для деплоя
       - name: Upload Allure Report Artifact
         uses: actions/upload-pages-artifact@v3
         if: always()
         with:
-          name: allure-report-artifact # Уникальное имя артефакта
+          name: allure-report-artifact
           path: 'allure-report'
 
-      # 9. Публикуем отчет на GitHub Pages
+      # Публикуем отчет на GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
         if: always()
         with:
-          artifact_name: allure-report-artifact # Используем тот же артефакт
+          artifact_name: allure-report-artifact
 
-      # 10. Отправляем уведомление в Telegram
+      # Отправляем уведомление в Telegram
       - name: Send Telegram notification
         if: always()
         env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }} # Токен бота (секрет)
-          TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }} # ID чата (секрет)
-          PROJECT_NAME: 'JS QA' # Название проекта
-          TEST_ENV: 'GitHub Actions' # Окружение
-          REPORT_LINK: '${{ steps.deployment.outputs.page_url }}' # Ссылка на отчет
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }}
+          PROJECT_NAME: 'JS QA'
+          TEST_ENV: 'GitHub Actions'
+          REPORT_LINK: '${{ steps.deployment.outputs.page_url }}'
         run: |
           node scripts/send.mjs allure-report/widgets/summary.json
 
       # ========== СОХРАНЯЕМ АРТЕФАКТЫ ДЛЯ ПРОСМОТРА ==========
 
-      # 11. Сохраняем результаты тестов как артефакт
+      # Сохраняем результаты тестов как артефакт
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v6.0.0
         continue-on-error: true
