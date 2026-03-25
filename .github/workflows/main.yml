@@ -54,14 +54,6 @@ jobs:
         continue-on-error: true
         if: always()
 
-      # Проверяем наличие файлов allure-results после тестов
-      - name: Debug allure-results location
-        run: |
-          echo "=== Количество файлов в allure-results ==="
-          echo "JSON: $(find allure-results -name "*.json" 2>/dev/null | wc -l)"
-          echo "PNG: $(find allure-results -name "*.png" 2>/dev/null | wc -l)"
-        if: always()
-
       # Генерируем Allure отчет
       - name: Сгенерировать allure отчет
         run: npx allure awesome ./allure-results --single-file
