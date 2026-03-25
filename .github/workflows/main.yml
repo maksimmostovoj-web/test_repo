@@ -60,6 +60,35 @@ jobs:
         continue-on-error: true
         if: always()
 
+      # ========== ДИАГНОСТИКА: ПРОВЕРЯЕМ ГДЕ ФАЙЛЫ ALLURE ==========
+      - name: Debug allure-results location
+        run: |
+          echo "=== Текущая директория ==="
+          pwd
+          echo ""
+          echo "=== Содержимое текущей директории ==="
+          ls -la
+          echo ""
+          echo "=== Поиск папки allure-results ==="
+          find . -name "allure-results" -type d 2>/dev/null
+          echo ""
+          echo "=== Если папка найдена в корне, показываем содержимое ==="
+          if [ -d "allure-results" ]; then
+            echo "✅ allure-results найдена в корне"
+            ls -la allure-results/ | head -20
+            echo "Количество JSON файлов: $(find allure-results -name "*.json" 2>/dev/null | wc -l)"
+            echo "Количество PNG файлов: $(find allure-results -name "*.png" 2>/dev/null | wc -l)"
+          else
+            echo "❌ allure-results НЕ найдена в корне"
+          fi
+          echo ""
+          echo "=== Поиск всех папок с результатами ==="
+          find . -type d -name "*result*" 2>/dev/null | head -20
+          echo ""
+          echo "=== Поиск всех .json файлов в проекте ==="
+          find . -name "*.json" 2>/dev/null | grep -v node_modules | head -20
+        if: always()
+
       # Загружаем свежие результаты тестов в Allure TestOps
       - name: Upload fresh results to Allure TestOps
         env:
