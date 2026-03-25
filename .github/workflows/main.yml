@@ -64,7 +64,11 @@ jobs:
           ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
           ALLURE_RESULTS: allure-results
         run: |
-          allurectl upload
+          echo "=== Содержимое allure-results (первые 10 файлов) ==="
+          ls -la allure-results/ | head -10
+          echo ""
+          echo "=== Загружаем с флагом force ==="
+          allurectl upload --force
         continue-on-error: true
         if: always()
 
